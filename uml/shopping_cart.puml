@@ -1,0 +1,21 @@
+@startuml
+state ShoppingCart {
+    [*] --> Empty: ShoppingCartCreatedEvent
+    Empty --> Collecting: ProductItemAddedEvent
+    Collecting -left-> Empty: ProductItemRemovedEvent [items = 0]
+    Collecting --> Collecting: ProductItemAddedEvent
+    Collecting --> Collecting: ProductItemRemovedEvent [items > 0]
+    Collecting --> Checkout
+    Checkout --> [*]: ShoppingCartOrderedEvent
+}
+state OrderProcessing {
+    ShoppingCart -> OrderProcessing: OrderPlacedEvent
+    [*] --> Invoice
+    Invoice --> Paid
+    Paid --> [*]
+    ||
+    [*] --> Shipped
+    Shipped --> Delivered
+    Delivered --> [*]
+}
+@enduml

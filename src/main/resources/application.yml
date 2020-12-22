@@ -1,0 +1,16 @@
+spring:
+    datasource:
+        initialization-mode: always
+    jpa:
+        hibernate:
+            ddl-auto: none
+
+axon:
+    axonserver:
+        enabled: false
+    serializer:
+        general: jackson
+    eventhandling:
+        processors:
+            logging:
+                mode: subscribing
