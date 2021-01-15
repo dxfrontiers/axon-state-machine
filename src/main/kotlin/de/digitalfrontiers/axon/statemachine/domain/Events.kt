@@ -34,3 +34,42 @@ data class OrderPlacedEvent(
     val productItems: Map<UUID, Long>,
     val totalPrice: Double
 )
+
+@Revision("1")
+data class CreditReservedEvent(
+    val orderId: UUID,
+    val amount: Double
+)
+
+@Revision("1")
+data class InvoiceRequestedEvent(
+    val invoiceId: UUID
+)
+
+@Revision("1")
+data class InvoicePaidEvent(
+    val invoiceId: UUID
+)
+
+@Revision("1")
+data class ShipmentRequestedEvent(
+    val shipmentId: UUID
+)
+
+@Revision("1")
+data class ShipmentDeliveredEvent(
+    val shipmentId: UUID
+)
+
+@Revision("1")
+data class OrderDeniedEvent(
+    val orderId: UUID,
+    val reason: String
+)
+
+@Revision("1")
+data class OrderCompletedEvent(
+    val orderId: UUID,
+    val invoiceId: UUID,
+    val shipmentId: UUID
+)

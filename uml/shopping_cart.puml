@@ -8,14 +8,26 @@ state ShoppingCart {
     Collecting --> Checkout
     Checkout --> [*]: ShoppingCartOrderedEvent
 }
+
 state OrderProcessing {
     ShoppingCart -> OrderProcessing: OrderPlacedEvent
-    [*] --> Invoice
-    Invoice --> Paid
-    Paid --> [*]
-    ||
-    [*] --> Shipped
-    Shipped --> Delivered
-    Delivered --> [*]
+    state startProcessing <<fork>>
+    state creditReservation <<choice>>
+    state endProcessing <<fork>>
+
+    [*] --> creditReservation
+
+    creditReservation --> [*]: OrderDeniedEvent [insufficient credits]
+    creditReservation --> startProcessing: CreditReservedEvent
+
+    startProcessing --> Invoice: InvoiceRequestedEvent
+    Invoice --> Paid: InvoicePaidEvent
+    Paid --> endProcessing
+
+    startProcessing --> Shipped: ShipmentRequestedEvent
+    Shipped --> Delivered: ShipmentDeliveredEvent
+    Delivered --> endProcessing
+
+    endProcessing --> [*]: OrderCompletedEvent
 }
 @enduml
